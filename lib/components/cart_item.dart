@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,26 @@ class CartItemWidget extends StatelessWidget {
           size: 40,
         ),
       ),
+      confirmDismiss: (_) {
+        return showDialog<bool>(
+            context: context,
+            builder: ((context) => AlertDialog(
+                  title: const Text('Tem certeza?'),
+                  content: const Text('Quer remover o item do carrinho?'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                        child: const Text('Não')),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                        child: const Text('Sim')),
+                  ],
+                )));
+      },
       onDismissed: (_) {
         Provider.of<Cart>(
           context,
