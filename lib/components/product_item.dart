@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/exceptions/http_exception.dart';
 import 'package:shop/utils/app_routes.dart';
 
 import '../models/product.dart';
@@ -11,6 +12,7 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(product.imageUrl),
@@ -34,25 +36,31 @@ class ProductItem extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                            title: Text('Excluir Produto.'),
-                            content: Text('Tem certeza?'),
+                            title: const Text('Excluir Produto.'),
+                            content: const Text('Tem certeza?'),
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    Navigator.of(ctx).pop();
+                                    Navigator.of(ctx).pop(false);
                                   },
-                                  child: Text('Não')),
+                                  child: const Text('Não')),
                               TextButton(
-                                  onPressed: () {
-                                    Provider.of<ProductList>(
-                                      context,
-                                      listen: false,
-                                    ).removeProduct(product);
-                                    Navigator.of(ctx).pop();
-                                  },
-                                  child: Text('Sim')),
+                                  onPressed: () => Navigator.of(ctx).pop(true),
+                                  child: const Text('Sim')),
                             ],
-                          ));
+                          )).then((value) async {
+                    if (value ?? false) {
+                      try {
+                        Provider.of<ProductList>(
+                          context,
+                          listen: false,
+                        ).removeProduct(product);
+                      } on HttpException catch (error) {
+                        msg.showSnackBar(
+                            SnackBar(content: Text(error.toString())));
+                      }
+                    }
+                  });
                 },
                 icon: const Icon(Icons.delete),
                 color: Theme.of(context).errorColor)
