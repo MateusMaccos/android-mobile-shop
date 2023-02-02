@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/components/app_drawer.dart';
 import 'package:shop/models/product_list.dart';
 import 'package:shop/utils/app_routes.dart';
-import '../components/badge.dart';
+import 'package:shop/components/badge.dart' as Badge;
 import '../components/product_grid.dart';
 import '../models/cart.dart';
 
@@ -72,7 +72,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
                 },
                 icon: const Icon(Icons.shopping_cart)),
             builder: (ctx, cart, child) =>
-                Badge(value: cart.itemsCount.toString(), child: child!),
+                Badge.Badge(value: cart.itemsCount.toString(), child: child!),
           )
         ],
       ),
