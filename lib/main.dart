@@ -9,6 +9,7 @@ import 'package:shop/pages/product_detail_page.dart';
 import 'package:shop/pages/product_form_page.dart';
 import 'package:shop/pages/product_page.dart';
 import 'package:shop/utils/app_routes.dart';
+import 'package:shop/utils/custom_route.dart';
 
 import 'models/auth.dart';
 import 'models/cart.dart';
@@ -56,7 +57,12 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
             primarySwatch: Colors.purple,
             secondaryHeaderColor: Colors.deepOrange,
-            fontFamily: 'Lato'),
+            fontFamily: 'Lato',
+            pageTransitionsTheme: PageTransitionsTheme(builders: {
+              TargetPlatform.android: CustomPageTransitionBuilder(),
+              TargetPlatform.iOS: CustomPageTransitionBuilder(),
+              TargetPlatform.windows: CustomPageTransitionBuilder(),
+            })),
         debugShowCheckedModeBanner: false,
         routes: {
           AppRoutes.AUTH_OR_HOME: (context) => const AuthOrHomePage(),
